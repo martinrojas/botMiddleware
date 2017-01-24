@@ -47,7 +47,7 @@ router.route('/carSearch')
                 json: true
             },
             function(error, response, body) {
-                res.json(body);
+                res.json(body.listings);
             })
     });
 
