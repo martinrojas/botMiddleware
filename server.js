@@ -47,7 +47,6 @@ router.get('/', function(req, res) {
 router.route('/carSearch/:zip_code/:car_make')
 
     .get(function(req, res) {
-        console.log(req.params);
         request({
                 method: 'GET',
                 uri: 'http://www.autotrader.com/rest/searchresults/base?zip=' + req.params.zip_code + '&makeCodeList=' + req.params.car_make + '&sortBy=distanceASC',
@@ -55,40 +54,65 @@ router.route('/carSearch/:zip_code/:car_make')
             },
             function(error, response, body) {
                 var responseJson = {
-                    "messages": [{
-                        "attachment": {
-                            "type": "template",
-                            "payload": {
-                                "template_type": "generic",
-                                "elements": []
-                            }
-                        }
-                    }]
+                    "messages": []
                 };
-
-                for (i = 0; i <= 4; i++) {
-                    var message = {
-                        "title": body.listings[i].title,
-                        "image_url": body.listings[i].imageURL,
-                        "subtitle": body.listings[i].description,
-                        "buttons": [{
-                                "type": "web_url",
-                                "url": "http://autotrader.com" + body.listings[i].vdpSeoUrl,
-                                "title": "View Item"
-                            },
-                            {
-                                "type": "phone_number",
-                                "phone_number": body.listings[i].ownerPhone,
-                                "title": "Call"
-                            },
-                            {
-                                "type": "element_share"
-                            }
-                        ]
+                var gallery = {
+                    "attachment": {
+                        "type": "template",
+                        "payload": {
+                            "template_type": "generic",
+                            "elements": []
+                        }
+                    }
+                };
+                if (body.listings === undefined) {
+                    console.log('undefined listings');
+                    var recommendationListings = body.noSearchResultsViewBean.recommendationListings;
+                    var noResults = {
+                        "text": "We could not find find and exact result, but we found some similar"
                     };
-                    responseJson.messages[0].attachment.payload.elements.push(message);
+                    responseJson.messages.push(noResults);
+
+                    for (var i = 0, len = recommendationListings.length; i < len; i++) {
+                        var message = {
+                            "title": recommendationListings[i].title,
+                            "image_url": recommendationListings[i].photo,
+                            "buttons": [{
+                                "type": "web_url",
+                                "url": "http://autotrader.com" + recommendationListings[i].vdpSeoUrl,
+                                "title": "Find out more"
+                            }]
+                        };
+                        gallery.attachment.payload.elements.push(message);
+                    }
+                } else {
+                    var listings = body.listings;
+                    for (i = 0; i < 4; i++) {
+                        var message = {
+                            "title": listings[i].title,
+                            "image_url": listings[i].imageURL,
+                            "subtitle": listings[i].description,
+                            "buttons": [{
+                                    "type": "web_url",
+                                    "url": "http://autotrader.com" + listings[i].vdpSeoUrl,
+                                    "title": "Find out more"
+                                },
+                                {
+                                    "type": "phone_number",
+                                    "phone_number": listings[i].ownerPhone,
+                                    "title": "Call Seller"
+                                },
+                                {
+                                    "type": "element_share"
+                                }
+                            ]
+                        };
+                        gallery.attachment.payload.elements.push(message);
+                    }
                 }
+                responseJson.messages.push(gallery);
                 res.json(responseJson);
+
             })
     });
 
