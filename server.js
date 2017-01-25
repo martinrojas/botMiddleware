@@ -44,16 +44,48 @@ router.get('/', function(req, res) {
 
 // on routes that end in /carSearch
 // ----------------------------------------------------
-router.route('/carSearch')
+router.route('/carSearch/:zip_code/:car_make')
 
     .get(function(req, res) {
+        console.log(req.params);
         request({
                 method: 'GET',
-                uri: 'http://www.autotrader.com/rest/searchresults/base?zip=30308&makeCodeList=BMW',
+                uri: 'http://www.autotrader.com/rest/searchresults/base?zip=' + req.params.zip_code + '&makeCodeList=' + req.params.car_make + '&sortBy=distanceASC',
                 json: true
             },
             function(error, response, body) {
-                res.json(body.listings);
+                var responseJson = {
+                    "messages": [{
+                        "attachment": {
+                            "type": "template",
+                            "payload": {
+                                "template_type": "generic",
+                                "elements": []
+                            }
+                        }
+                    }]
+                };
+
+                for (i = 0; i <= 4; i++) {
+                    var message = {
+                        "title": body.listings[i].title,
+                        "image_url": body.listings[i].imageURL,
+                        "subtitle": body.listings[i].description,
+                        "buttons": [{
+                                "type": "web_url",
+                                "url": "http://autotrader.com" + body.listings[i].vdpSeoUrl,
+                                "title": "View Item"
+                            },
+                            {
+                                "type": "phone_number",
+                                "phone_number": body.listings[i].ownerPhone,
+                                "title": "Call"
+                            }
+                        ]
+                    };
+                    responseJson.messages[0].attachment.payload.elements.push(message);
+                }
+                res.json(responseJson);
             })
     });
 
