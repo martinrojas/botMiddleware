@@ -80,6 +80,9 @@ router.route('/carSearch/:zip_code/:car_make')
                                 "type": "phone_number",
                                 "phone_number": body.listings[i].ownerPhone,
                                 "title": "Call"
+                            },
+                            {
+                                "type": "element_share"
                             }
                         ]
                     };
