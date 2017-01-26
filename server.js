@@ -49,7 +49,7 @@ router.route('/carSearch/:zip_code/:car_make')
     .get(function(req, res) {
         request({
                 method: 'GET',
-                uri: 'http://www.autotrader.com/rest/searchresults/base?zip=' + req.params.zip_code + '&makeCodeList=' + req.params.car_make + '&sortBy=distanceASC',
+                uri: 'http://www.autotrader.com/rest/searchresults/base?zip=' + req.params.zip_code + '&makeCodeList=' + req.params.car_make + '&sortBy=distanceASC&listingTypes=new',
                 json: true
             },
             function(error, response, body) {
