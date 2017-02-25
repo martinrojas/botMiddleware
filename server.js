@@ -8,6 +8,7 @@ var express = require('express'); // call express
 var app = express(); // define our app using express
 var bodyParser = require('body-parser');
 var request = require('request');
+var geolib = require('geolib');
 
 // configure app to use bodyParser()
 // this will let us get the data from a POST
@@ -17,6 +18,36 @@ app.use(bodyParser.urlencoded({
 app.use(bodyParser.json());
 
 var port = process.env.PORT || 8080; // set our port
+
+
+
+var northWest = [
+{latitude: 33.97156, longitude: -84.3538 },
+{latitude: 33.88382, longitude: -84.4822 },
+{latitude: 33.75889, longitude: -84.51654 },
+{latitude: 33.74319, longitude: -84.39088 }
+];
+
+var northEast = [
+{latitude: 33.95675, longitude: -84.349 },
+{latitude: 33.86899, longitude: -84.2357 },
+{latitude: 33.74519, longitude: -84.2116 },
+{latitude: 33.74319, longitude: -84.39088 }
+];
+
+var southEast = [
+{latitude: 33.61662, longitude: -84.39294 },
+{latitude: 33.67264, longitude: -84.28239 },
+{latitude: 33.74519, longitude: -84.21167 },
+{latitude: 33.74319, longitude: -84.39088 }
+];
+
+var southWest = [
+{latitude: 33.61662, longitude: -84.39294 },
+{latitude: 33.61319, longitude: -84.498 },
+{latitude: 33.76003, longitude: -84.52478 },
+{latitude: 33.74319, longitude: -84.39088 }
+];
 
 // ROUTES FOR OUR API
 // =============================================================================
@@ -45,7 +76,6 @@ router.get('/', function(req, res) {
 // on routes that end in /carSearch
 // ----------------------------------------------------
 router.route('/carSearch/:zip_code/:car_make')
-
     .get(function(req, res) {
         request({
                 method: 'GET',
@@ -116,7 +146,24 @@ router.route('/carSearch/:zip_code/:car_make')
             })
     });
 
+router.route('/trash/:lat/:long')
+  .get(function(req, res) {
 
+    var pickupDay;
+
+    if (geolib.isPointInside({latitude: req.params.lat, longitude: req.params.long}, northWest)) { pickupDay = "Thursday" }
+    else if (geolib.isPointInside({latitude: req.params.lat, longitude: req.params.long}, northEast)) { pickupDay = "Monday" }
+    else if (geolib.isPointInside({latitude: req.params.lat, longitude: req.params.long}, southWest)) { pickupDay = "Wednesday" }
+    else if (geolib.isPointInside({latitude: req.params.lat, longitude: req.params.long}, southEast)) { pickupDay = "Tuesday" }
+
+
+    res.json({
+        "messages": [{
+                "text": "Your pick up day is on " + pickupDay
+            }
+        ]
+    });
+  });
 
 
 // REGISTER OUR ROUTES -------------------------------
