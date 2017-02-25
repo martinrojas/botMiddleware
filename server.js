@@ -158,6 +158,10 @@ router.route('/trash/:lat/:long')
 
 
     res.json({
+        "set_attributes":
+        {
+         "trashDay": pickupDay
+        },
         "messages": [{
                 "text": "Your pick up day is on " + pickupDay
             }
