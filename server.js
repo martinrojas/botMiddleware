@@ -161,7 +161,7 @@ router.route('/carSearch/:zip_code/:car_make')
           }
         } else {
           var listings = body.listings;
-          for (i = 0; i < 4; i++) {
+          for (i = 0; i < 5; i++) {
             var message = {
               "title": listings[i].title,
               "image_url": listings[i].imageURL,
