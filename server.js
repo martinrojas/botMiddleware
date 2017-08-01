@@ -102,7 +102,7 @@ router.route('/carSearch/:zip_code/:car_make')
               "buttons": [{
                   "type": "web_url",
                   "url": "http://autotrader.com" + listings[i].vdpSeoUrl,
-                  "title": "Find out more"
+                  "title": "See More Details"
                 },
                 {
                   "type": "phone_number",
