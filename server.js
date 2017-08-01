@@ -21,77 +21,10 @@ var port = process.env.PORT || 8080; // set our port
 
 
 
-var northWest = [{
-    latitude: 33.97156,
-    longitude: -84.3538
-  },
-  {
-    latitude: 33.88382,
-    longitude: -84.4822
-  },
-  {
-    latitude: 33.75889,
-    longitude: -84.51654
-  },
-  {
-    latitude: 33.74319,
-    longitude: -84.39088
-  }
-];
-
-var northEast = [{
-    latitude: 33.95675,
-    longitude: -84.349
-  },
-  {
-    latitude: 33.86899,
-    longitude: -84.2357
-  },
-  {
-    latitude: 33.74519,
-    longitude: -84.2116
-  },
-  {
-    latitude: 33.74319,
-    longitude: -84.39088
-  }
-];
-
-var southEast = [{
-    latitude: 33.61662,
-    longitude: -84.39294
-  },
-  {
-    latitude: 33.67264,
-    longitude: -84.28239
-  },
-  {
-    latitude: 33.74519,
-    longitude: -84.21167
-  },
-  {
-    latitude: 33.74319,
-    longitude: -84.39088
-  }
-];
-
-var southWest = [{
-    latitude: 33.61662,
-    longitude: -84.39294
-  },
-  {
-    latitude: 33.61319,
-    longitude: -84.498
-  },
-  {
-    latitude: 33.76003,
-    longitude: -84.52478
-  },
-  {
-    latitude: 33.74319,
-    longitude: -84.39088
-  }
-];
+var northWest = [{latitude: 33.97156, longitude: -84.3538},  {latitude: 33.88382,longitude: -84.4822},  {latitude: 33.75889,longitude: -84.51654},  {latitude: 33.74319,longitude: -84.39088}];
+var northEast = [{latitude: 33.95675, longitude: -84.349},  {latitude: 33.86899,longitude: -84.2357},  {latitude: 33.74519,longitude: -84.2116},  {latitude: 33.74319,longitude: -84.39088}];
+var southEast = [{latitude: 33.61662, longitude: -84.39294},  {latitude: 33.67264, longitude: -84.28239},  {latitude: 33.74519, longitude: -84.21167}, {latitude: 33.74319, longitude: -84.39088}];
+var southWest = [{latitude: 33.61662, longitude: -84.39294}, {latitude: 33.61319, longitude: -84.498}, {latitude: 33.76003, longitude: -84.52478},  {latitude: 33.74319, longitude: -84.39088}];
 
 // ROUTES FOR OUR API
 // =============================================================================
@@ -161,7 +94,7 @@ router.route('/carSearch/:zip_code/:car_make')
           }
         } else {
           var listings = body.listings;
-          for (i = 0; i < 5; i++) {
+          for (i = 0; i < 7; i++) {
             var message = {
               "title": listings[i].title,
               "image_url": listings[i].imageURL,
