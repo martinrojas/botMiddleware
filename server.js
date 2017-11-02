@@ -68,6 +68,7 @@ router.route('/carSearch/:zip_code/:car_make')
             "type": "template",
             "payload": {
               "template_type": "generic",
+              "image_aspect_ratio": "square",
               "elements": []
             }
           }
